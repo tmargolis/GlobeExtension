@@ -1,4 +1,4 @@
-# GlobeExtension
+GlobeExtension
 ===============
 3D WebGL Globe visualization extension for Qlik Sense
 
