@@ -1,0 +1,7 @@
+{
+	"name": "3D Globe",
+	"description": "3D WebGL Globe. Specify location name, latitude and longitude as dimensions and value as measure",
+	"type": "visualization",
+	"version": 1,
+	"author": "Todd Margolis"
+}
