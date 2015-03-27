@@ -52,7 +52,8 @@ define(["jquery", "text!./style.css", "./js/Detector", "./js/three.min", "./js/W
 
 			if(!Detector.webgl){
 			    parameters = {parent:id, id:"elder"};
-				Detector.addGetWebGLMessage();
+				//Detector.addGetWebGLMessage();
+				$element.html("This extension only works inside of a WebGL capable browser");
 			} else {
 				var container = document.getElementById(id);
 				var options = {imgDir:"./"};
