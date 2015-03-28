@@ -1,4 +1,5 @@
-define(["jquery", "text!./style.css", "./js/Detector", "./js/three.min", "./js/WebGLglobe"], function($, cssContent, detector, threeJS, WebGLglobe) {
+// define(["jquery", "text!./style.css", "./js/Detector", "./js/three.min", "./js/WebGLglobe"], function($, cssContent, detector, threeJS, WebGLglobe) {
+define(["jquery", "text!./style.css", "./js/Detector", "./js/three.min", "./js/WebGLglobe", "./js/webgl-utils"], function($, cssContent, detector, threeJS) {
     $("<style>").html(cssContent).appendTo("head");
 
 	return {
@@ -46,13 +47,33 @@ define(["jquery", "text!./style.css", "./js/Detector", "./js/three.min", "./js/W
             if (document.getElementById(id)) {
                 $("#" + id).empty();
             } else {
+                // $element.append($('<div />').attr("id", "test").text("test")); // for debugging
                 $element.append($('<div />').attr("id", id));
             }
             $("#" + id).width($element.width()).height($element.height());
 
+/*
+// For WebGL Debugging
+var cvs = document.createElement('canvas');
+var link = document.createElement('a');
+var linkText = document.createTextNode("gpu info");
+link.appendChild(linkText);
+link.title = "gpu info";
+link.href = "chrome://gpu/";
+// document.getElementById(id).appendChild(link);
+// $element.append($('<canvas />').attr("id", id+"canvas"));
+gl = WebGLUtils.setupWebGL(cvs);
+// if (!gl) {
+//     return;
+// }
+*/
+
 			if(!Detector.webgl){
-			    parameters = {parent:id, id:"elder"};
-				Detector.addGetWebGLMessage();
+			    parameters = {parent:document.getElementById(id), id:"webGlErrorMsg"};
+				// Detector.addGetWebGLMessage(parameters);
+                var errorText = document.createTextNode("This extension only works inside of a WebGL capable browser and compatible graphics card. Please try opening this application in a compatible web browser (such as Chrome v9+) through http://localhost:4848/hub");
+                document.getElementById(id).appendChild(errorText);
+				// $element.html("This extension only works inside of a WebGL capable browser<BR> Please open this application in a modern web browser through http://localhost:4848/hub");
 			} else {
 				var container = document.getElementById(id);
 				var options = {imgDir:"./"};

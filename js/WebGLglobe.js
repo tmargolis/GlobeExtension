@@ -76,7 +76,7 @@ DAT.Globe = function(container, opts) {
   var curZoomSpeed = 0;
   var zoomSpeed = 50;
 
-  var mouse = { x: 0, y: 0 }, mouseOnDown = { x: 0, y: 0 };
+  var mouse = { x: 0, y: 0 }, mouseOnDown = { x: 0, y: 0 }, pinchOnDown = { x: 0, y: 0 };
   var rotation = { x: 0, y: 0 },
       target = { x: Math.PI*3/2, y: Math.PI / 6.0 },
       targetOnDown = { x: 0, y: 0 };
@@ -163,6 +163,9 @@ DAT.Globe = function(container, opts) {
     container.addEventListener('mouseout', function() {
       overRenderer = false;
     }, false);
+
+    container.addEventListener('touchstart', onTouchStart, false);
+
   }
 
   function addData(data, opts) {
@@ -287,6 +290,28 @@ DAT.Globe = function(container, opts) {
     container.style.cursor = 'move';
   }
 
+var touchesInAction = {};
+
+  var pinchDelta = 0;
+
+  function onTouchStart(event) {
+    event.preventDefault();
+
+    container.addEventListener('touchmove', onTouchMove, false);
+    container.addEventListener('touchend', onTouchEnd, false);
+    container.addEventListener('touchleave', onTouchLeave, false);
+
+    var touches = event.changedTouches;
+
+    mouseOnDown.x = - touches[0].pageX;
+    mouseOnDown.y =   touches[0].pageY;
+
+    targetOnDown.x = target.x;
+    targetOnDown.y = target.y;
+
+    container.style.cursor = 'move';
+  }
+
   function onMouseMove(event) {
     mouse.x = - event.clientX;
     mouse.y = event.clientY;
@@ -300,6 +325,37 @@ DAT.Globe = function(container, opts) {
     target.y = target.y < - PI_HALF ? - PI_HALF : target.y;
   }
 
+  function onTouchMove(event) {
+    var zoomDamp = distance/1000;
+
+    var touches = event.changedTouches;
+
+    if(touches.length == 1){
+      target.x = targetOnDown.x + (-touches[0].pageX - mouseOnDown.x) * 0.005 * zoomDamp;
+      target.y = targetOnDown.y + (touches[0].pageY - mouseOnDown.y) * 0.005 * zoomDamp;
+
+      target.y = target.y > PI_HALF ? PI_HALF : target.y;
+      target.y = target.y < - PI_HALF ? - PI_HALF : target.y;
+    }
+
+    if(touches.length == 2){
+      var a={}, b={};
+      a.x = - touches[0].pageX;
+      a.y =   touches[0].pageY;
+
+      b.x = - touches[1].pageX;
+      b.y =   touches[1].pageY;
+
+      var newDelta = Math.sqrt((a.x -= b.x) * a.x + (a.y -= b.y) * a.y);
+      if(!pinchDelta){
+        pinchDelta = newDelta;
+      }
+
+      zoom((newDelta - pinchDelta) * 0.3);
+    }
+
+  }
+
   function onMouseUp(event) {
     container.removeEventListener('mousemove', onMouseMove, false);
     container.removeEventListener('mouseup', onMouseUp, false);
@@ -307,10 +363,25 @@ DAT.Globe = function(container, opts) {
     container.style.cursor = 'auto';
   }
 
+  function onTouchEnd(event) {
+    pinchDelta = 0;
+
+    container.removeEventListener('touchmove', onTouchMove, false);
+    container.removeEventListener('touchend', onTouchEnd, false);
+    container.removeEventListener('touchleave', onTouchLeave, false);
+    container.style.cursor = 'auto';
+  }
+
   function onMouseOut(event) {
     container.removeEventListener('mousemove', onMouseMove, false);
     container.removeEventListener('mouseup', onMouseUp, false);
     container.removeEventListener('mouseout', onMouseOut, false);
+  }
+
+  function onTouchLeave(event) {
+    container.removeEventListener('touchmove', onTouchMove, false);
+    container.removeEventListener('touchend', onTouchEnd, false);
+    container.removeEventListener('touchleave', onTouchLeave, false);
   }
 
   function onMouseWheel(event) {

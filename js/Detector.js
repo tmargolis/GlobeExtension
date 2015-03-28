@@ -25,12 +25,13 @@ Detector = {
 
     if ( ! this.webgl ) {
 
-      domElement.innerHTML = window.WebGLRenderingContext ? [
-        'Sorry, your graphics card doesn\'t support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a>'
-      ].join( '\n' ) : [
-        'Sorry, your browser doesn\'t support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a><br/>',
+      domElement.innerHTML = 
+        // window.WebGLRenderingContext ? [
+      //   'Sorry, your graphics card doesn\'t support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a>'
+      // ].join( '\n' ) : [
+        ['Sorry, your browser doesn\'t support <a href="http://khronos.org/webgl/wiki/Getting_a_WebGL_Implementation">WebGL</a><br/>',
         'Please try with',
-        '<a href="http://www.google.com/chrome">Chrome</a>, ',
+        '<a href="http://www.google.com/chrome" target="_blank">Chrome</a>, ',
         '<a href="http://www.mozilla.com/en-US/firefox/new/">Firefox 4</a> or',
         '<a href="http://nightly.webkit.org/">Webkit Nightly (Mac)</a>'
       ].join( '\n' );
@@ -42,7 +43,7 @@ Detector = {
   },
 
   addGetWebGLMessage : function ( parameters ) {
-    console.log(parameters.id);
+    console.log("id", parameters);
 
     var parent, id, domElement;
 
@@ -50,6 +51,9 @@ Detector = {
 
     parent = parameters.parent !== undefined ? parameters.parent : document.body;
     id = parameters.id !== undefined ? parameters.id : 'oldie';
+
+    console.log("parent", parent);
+    console.log("id", id);
 
     domElement = Detector.getWebGLErrorMessage();
     domElement.id = id;
