@@ -78,7 +78,8 @@ DAT.Globe = function(container, opts) {
 
   var mouse = { x: 0, y: 0 }, mouseOnDown = { x: 0, y: 0 }, pinchOnDown = { x: 0, y: 0 };
   var rotation = { x: 0, y: 0 },
-      target = { x: Math.PI*3/2, y: Math.PI / 6.0 },
+      // target = { x: Math.PI*3/2, y: Math.PI / 6.0 },
+      target = { x: Math.PI*2/2, y: Math.PI / 6.0 },
       targetOnDown = { x: 0, y: 0 };
 
   var distance = 100000, distanceTarget = 100000;
@@ -210,11 +211,13 @@ DAT.Globe = function(container, opts) {
       color = colorFnWrapper(data,i);
       size = data[i + 2];
       size = size*200;
+      // console.log("adding point");
       addPoint(lat, lng, size, color, subgeo);
     }
     if (opts.animated) {
       this._baseGeometry.morphTargets.push({'name': opts.name, vertices: subgeo.vertices});
     } else {
+      // console.log("num points", subgeo.vertices.length);
       this._baseGeometry = subgeo;
     }
 
@@ -228,6 +231,7 @@ DAT.Globe = function(container, opts) {
               vertexColors: THREE.FaceColors,
               morphTargets: false
             }));
+        // console.log("num points for scene", this.points.geometry.vertices.length);
       } else {
         if (this._baseGeometry.morphTargets.length < 8) {
           console.log('t l',this._baseGeometry.morphTargets.length);

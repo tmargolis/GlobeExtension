@@ -9,8 +9,8 @@ define(["jquery", "text!./style.css", "./js/Detector", "./js/three.min", "./js/W
                 qDimensions: [],
                 qMeasures: [],
                 qInitialDataFetch: [{
-                    qWidth: 10,
-                    qHeight: 500
+                    qWidth: 4,
+                    qHeight: 2500
                 }]
             }
         },
@@ -21,12 +21,12 @@ define(["jquery", "text!./style.css", "./js/Detector", "./js/three.min", "./js/W
                 dimensions: {
                     uses: "dimensions",
                     min: 3,
-                    max: 20
+                    max: 3
                 },
                 measures: {
                     uses: "measures",
                     min: 1,
-                    max: 2
+                    max: 1
                 },
                 sorting: {
                     uses: "sorting"
@@ -56,17 +56,18 @@ define(["jquery", "text!./style.css", "./js/Detector", "./js/three.min", "./js/W
 // For WebGL Debugging
 var cvs = document.createElement('canvas');
 var link = document.createElement('a');
-var linkText = document.createTextNode("gpu info");
+var linkText = document.createTextNode("webgl info");
 link.appendChild(linkText);
-link.title = "gpu info";
-link.href = "chrome://gpu/";
-// document.getElementById(id).appendChild(link);
+link.title = "webgl info";
+link.href = "http://webglreport.com/";
+document.getElementById(id).appendChild(link);
 // $element.append($('<canvas />').attr("id", id+"canvas"));
 gl = WebGLUtils.setupWebGL(cvs);
 // if (!gl) {
 //     return;
 // }
 */
+
 
 			if(!Detector.webgl){
 			    parameters = {parent:document.getElementById(id), id:"webGlErrorMsg"};
@@ -86,9 +87,11 @@ gl = WebGLUtils.setupWebGL(cvs);
 					data.push(row[1].qNum, row[2].qNum, row[3].qNum);
 					if(row[3].qNum > maxVal) { maxVal = row[3].qNum; }
 	            });
+                // Normalize data
 	            for (i=2; i<data.length; i+=3){
 	            	data[i] = data[i]/maxVal/2;
 	            }
+                // console.log("data length",data.length);
 
             	globe.addData(data, {format: 'magnitude', name: "Series 1", animated: false});
 	            globe.createPoints();
