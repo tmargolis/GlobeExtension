@@ -12,6 +12,7 @@
  */
 
 var DAT = DAT || {};
+var distanceTarget = 100000;
 
 DAT.Globe = function(container, opts) {
   opts = opts || {};
@@ -78,11 +79,13 @@ DAT.Globe = function(container, opts) {
 
   var mouse = { x: 0, y: 0 }, mouseOnDown = { x: 0, y: 0 }, pinchOnDown = { x: 0, y: 0 };
   var rotation = { x: 0, y: 0 },
-      // target = { x: Math.PI*3/2, y: Math.PI / 6.0 },
-      target = { x: Math.PI*2/2, y: Math.PI / 6.0 },
+      // target = { x: Math.PI*2/2, y: Math.PI / 6.0 },
+      target = opts.target;
       targetOnDown = { x: 0, y: 0 };
 
-  var distance = 100000, distanceTarget = 100000;
+  var distance = 100000;
+    // distanceTarget = 100000;
+    // distanceTarget = opts.distanceTarget;
   var padding = 40;
   var PI_HALF = Math.PI / 2;
 
@@ -327,6 +330,9 @@ var touchesInAction = {};
 
     target.y = target.y > PI_HALF ? PI_HALF : target.y;
     target.y = target.y < - PI_HALF ? - PI_HALF : target.y;
+
+    opts.target.x = target.x;
+    opts.target.y = target.y;
   }
 
   function onTouchMove(event) {
@@ -419,6 +425,8 @@ var touchesInAction = {};
     distanceTarget -= delta;
     distanceTarget = distanceTarget > 1000 ? 1000 : distanceTarget;
     distanceTarget = distanceTarget < 350 ? 350 : distanceTarget;
+
+    // opts.distanceTarget = distanceTarget;
   }
 
   function animate() {

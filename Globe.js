@@ -2,6 +2,8 @@
 define(["jquery", "text!./style.css", "./js/Detector", "./js/three.min", "./js/WebGLglobe", "./js/webgl-utils"], function($, cssContent, detector, threeJS) {
     $("<style>").html(cssContent).appendTo("head");
 
+    var target = { x: Math.PI*2/2, y: Math.PI / 6.0 };
+
 	return {
         initialProperties: {
             version: 1.1,
@@ -77,7 +79,7 @@ gl = WebGLUtils.setupWebGL(cvs);
 				// $element.html("This extension only works inside of a WebGL capable browser<BR> Please open this application in a modern web browser through http://localhost:4848/hub");
 			} else {
 				var container = document.getElementById(id);
-				var options = {imgDir:"./"};
+				var options = {imgDir:"./", target: target};
 
 				var globe = new DAT.Globe(container, options);
 
